@@ -1,16 +1,27 @@
-var seneca = require('seneca')()
-
-seneca.add('role:v1,cmd:caz',function(args,done){
-  done(null,{caz:args.q+' ANALYSE '})
-})
+var seneca = require('seneca')();
+var http = require('http');
 
 
 seneca.add('role:foo,cmd:bar',function(args,done){
-  done(null,{bar:args.zoo+'b'})
+	
+  /* 
+   * https://dandelion.eu/products/datatxt/nex/demo/?text=The+Mona+Lisa+is+a+16th+century+oil+painting+created+by+Leonardo.+It%27s+held+at+the+Louvre+in+Paris.&lang=auto&min_confidence=0.6&exec=true#results
+   * 
+   * */	
+	
+  http.get("http://www.cuisineaz.com", function(res) {
+	  console.log("Got response: " + res.statusCode+"   args:"+args.q);
+	}).on('error', function(e) {
+	  console.log("Got error: " + e.message);
+	});
+  
+	
+  done(null,{bar:args.q+'b ok'})
+  
 })
 
 seneca.add('role:foo,cmd:qaz',function(args,done){
-  done(null,{qaz:args.zoo+'z'})
+  done(null,{qaz:args.zoo+' zaaa'})
 })
 
 
