@@ -1,8 +1,9 @@
 var seneca = require('seneca')();
 var http = require('http');
+var https = require('https');
 
-var app_id=6cc86462;
-var app_key=8b5d542992886977103ac6987daf16a9;
+var app_id="6cc86462";
+var app_key="8b5d542992886977103ac6987daf16a9";
 
 /* 
 * http://localhost:3000/v1/request?q=jjj
@@ -10,11 +11,13 @@ var app_key=8b5d542992886977103ac6987daf16a9;
 * */	
    
 seneca.add('role:v1,cmd:request',function(args,done){
+
+  var url_dandelion = "https://api.dandelion.eu/datatxt/nex/v1/?min_confidence=0.1&social.parse_hashtag=False&text="+args.q+"&country=-1&app_id="+app_id+"&app_key="+app_key;
 	
-  http.get("https://api.dandelion.eu/datatxt/nex/v1/?min_confidence=0.1&social.parse_hashtag=False&text="+args.q+"&country=-1&app_id="+app_id+"&app_key="+app_key, function(res) {
+  https.get(url_dandelion, function(res) {
 	  
 	  console.log("Got response: " + res.statusCode);
-	  console.log("res: " + res);	  
+	  console.log("res: ",res);	  
 	  
 	  //TODO: si la requete n' existe pas
 	  
@@ -30,7 +33,7 @@ seneca.add('role:v1,cmd:request',function(args,done){
 	  
 	}).on('error', function(e) {
 	  console.log("Got error: " + e.message);
-	  done(null,{'error'})
+	  done(null,{request:'error'});
 	});
     
 })
