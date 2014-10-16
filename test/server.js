@@ -1,6 +1,9 @@
 var seneca = require('seneca')();
 var http = require('http');
 var https = require('https');
+var Firebase = require('firebase');
+
+var dataRef = new Firebase('https://rankedia.firebaseio.com/ ');
 
 var app_id="6cc86462";
 var app_key="8b5d542992886977103ac6987daf16a9";
@@ -101,6 +104,11 @@ seneca.add('role:v1,cmd:request',function(args,done){
 		});
 		req.end();		
 		
+		
+		//on stocke la requete dans firebase
+		dataRef.set({request:args.q,found:string,sparql:'test'});
+
+		//on display pour angular
 		done(null,{request:args.q,found:string,sparql:'test'});
 		
       });	  
